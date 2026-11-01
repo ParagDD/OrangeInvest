@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Orange Invest · Errands</title>
+<style>
+/* brand tokens: edit here to re-theme */
+:root{--brand:#ff7900;--ink:#111;--mut:#6b6b6b;--soft:#f5f4f2;--line:#e3e1dd;--card:#fff;--ok:#1f9d55;--bad:#d1391c;--warn:#f5b800;--font:"Helvetica Neue",Helvetica,Arial,sans-serif;--mono:ui-monospace,Consolas,"SF Mono",monospace;--hood:#161616}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font:15px/1.5 var(--font);color:var(--ink);background:var(--soft);display:flex;flex-direction:column;overflow:hidden}
+button,select,input{font:inherit;color:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+header{flex:none;height:60px;background:#000;color:#fff;display:flex;align-items:center;gap:12px;padding:0 20px}
+.logo{width:34px;height:34px;background:var(--brand);color:#000;font-weight:900;font-size:19px;display:grid;place-items:center}
+header b{font-size:17px;letter-spacing:-.2px;white-space:nowrap}@media(max-width:600px){header span.sub{display:none}header{padding:0 12px}#pill{font-size:12px;padding:6px 10px}#feed{padding:18px 14px 8px}.dock{padding:8px 14px 12px}}header span.sub{color:#9a9a9a;font-size:13px}
+#pill{margin-left:auto;display:flex;align-items:center;gap:8px;background:#1f1f1f;border:1px solid #333;color:#fff;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600}
+#pill:hover{border-color:var(--brand)}#pill i{width:9px;height:9px;border-radius:50%;background:var(--ok)}#pill.bad i{background:var(--bad)}
+#app{flex:1;min-height:0;display:grid;grid-template-columns:1fr 0;transition:grid-template-columns .25s}
+#app.open{grid-template-columns:1fr minmax(380px,34%)}
+@media(prefers-reduced-motion:reduce){#app{transition:none}}
+@media(max-width:1000px){#app,#app.open{grid-template-columns:1fr}#hood{position:fixed;top:60px;right:0;bottom:0;width:min(96vw,520px);z-index:5;transform:translateX(100%);transition:transform .25s}#app.open #hood{transform:none}}
+.stage{display:flex;flex-direction:column;min-height:0;min-width:0}
+#feed{flex:1;overflow:auto;padding:28px 20px 12px;scroll-behavior:smooth}
+.col{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.hero h1{font-size:clamp(30px,5vw,46px);line-height:1.04;letter-spacing:-1.5px;margin:18px 0 8px;font-weight:800}
+.hero h1 em{font-style:normal;background:var(--brand);padding:0 8px}
+.hero p{color:var(--mut);max-width:520px;margin:0 0 18px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);padding:16px;text-align:left;display:flex;flex-direction:column;gap:6px;border-radius:4px}
+.tile:hover{border-color:var(--ink);transform:translateY(-2px)}.tile span{font-size:26px}.tile b{font-size:15px}.tile small{color:var(--mut)}
+.sec{font-weight:700;font-size:13px;color:var(--mut);margin:18px 0 4px}
+.bk{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);padding:10px 14px;border-radius:4px}
+.bk div{flex:1;min-width:0}.bk small{color:var(--mut);display:block}.bk button{font-size:12.5px;padding:4px 10px;border:1px solid var(--ink);background:#fff;border-radius:99px}.bk button:hover{background:var(--ink);color:#fff}
+.m{max-width:86%;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:16px}
+.m.u{align-self:flex-end;background:#000;color:#fff;border-bottom-right-radius:4px}
+.m.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px}.m.a.bad{border-color:var(--bad);background:#fff5f2}
+.m.s{align-self:center;font-size:12.5px;color:var(--mut)}
+.typing{display:flex;gap:4px;padding:14px}.typing i{width:7px;height:7px;border-radius:50%;background:#bbb;animation:b 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes b{50%{transform:translateY(-4px);background:var(--brand)}}
+.note{font-size:13px;color:var(--mut);border-left:3px solid var(--brand);padding:2px 10px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:6px;display:grid;grid-template-columns:48px 1fr auto;gap:4px 14px;align-items:center;padding:14px;text-align:left;width:100%}
+.pc:hover{border-color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.av{width:48px;height:48px;background:#000;color:var(--brand);display:grid;place-items:center;font-weight:800;font-size:20px;grid-row:span 2}
+.pc b{font-size:16px}.pc small{color:var(--mut)}.pc .pr{text-align:right;font-size:20px;font-weight:800;grid-row:span 2}
+.chip{display:inline-block;border:1px solid var(--ink);border-radius:99px;padding:1px 10px;font-size:13px;font-weight:600;margin-right:6px}
+.pc:hover .chip{background:var(--brand);border-color:var(--brand)}
+.sheet{background:var(--card);border:2px solid #000;border-radius:6px;overflow:hidden;animation:up .28s ease-out}
+@keyframes up{from{transform:translateY(14px);opacity:0}}@media(prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sheet .top{background:var(--brand);color:#000;padding:10px 16px;font-weight:800;font-size:17px}
+.sheet dl{margin:0;padding:12px 16px;display:grid;grid-template-columns:90px 1fr;gap:6px 10px}.sheet dt{color:var(--mut)}.sheet dd{margin:0;font-weight:600}
+.sheet .tot{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.perf{border-top:2px dashed var(--line);margin:0 16px}.sheet .fine{padding:10px 16px 4px;font-size:12.5px;color:var(--mut)}.sheet code{font:11.5px var(--mono)}
+.bar{height:4px;background:var(--line);margin:6px 16px 0}.bar i{display:block;height:100%;background:var(--brand)}
+.btns{display:flex;gap:10px;padding:12px 16px 16px}.go{flex:1;background:#000;color:#fff;border:0;padding:13px;font-weight:700;font-size:16px;border-radius:4px}.go:hover{background:var(--brand);color:#000}
+.no{background:#fff;border:2px solid #000;padding:13px 20px;font-weight:700;border-radius:4px}.no:hover{background:var(--soft)}
+.ticket{background:#000;color:#fff;border-radius:6px;padding:16px 18px;border-left:10px solid var(--brand);animation:up .3s ease-out}
+.ticket small{color:#aaa}.ticket h3{margin:4px 0 8px;font-size:22px;letter-spacing:-.4px}.ver{display:inline-block;background:var(--ok);color:#fff;font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:99px;margin-bottom:6px}
+.dock{flex:none;padding:10px 20px 16px}.dock .col{gap:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chips button{background:#fff;border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:13px}.chips button:hover{border-color:var(--ink)}
+form{display:flex;background:#fff;border:2px solid #000;border-radius:99px;padding:4px 4px 4px 18px}
+form input{flex:1;border:0;outline:0;background:none;min-width:0}form button{background:var(--brand);border:0;border-radius:99px;padding:9px 22px;font-weight:800;color:#000}form button:hover{background:#000;color:#fff}
+form input:focus-visible{outline:0}form:focus-within{box-shadow:0 0 0 3px var(--brand)}
+/* under the hood */
+#hood{background:var(--hood);color:#eee;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#hood h2{font-size:15px;margin:0;padding:14px 16px 6px;display:flex;gap:8px;align-items:center}#hood h2 small{color:#999;font-weight:400}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#2a2a2a;margin:6px 16px}.kp div{background:var(--hood);padding:6px 8px}.kp b{display:block;font-size:17px}.kp small{color:#999;font-size:11.5px}
+.pipe{display:flex;padding:12px 10px 4px}.stp{flex:1;text-align:center;position:relative;font-size:11.5px;color:#999}
+.stp i{display:grid;place-items:center;width:24px;height:24px;margin:0 auto 4px;border:2px solid #444;font-style:normal;font-weight:700;position:relative;z-index:1;background:var(--hood)}
+.stp:not(:last-child)::after{content:"";position:absolute;top:11px;left:50%;width:100%;height:2px;background:#444}
+.stp.done{color:#fff}.stp.done i{background:#fff;border-color:#fff;color:#000}.stp.done::after{background:#fff}.stp.act i{background:var(--brand);border-color:var(--brand);color:#000}.stp.act{color:var(--brand)}.stp.bad i{background:var(--bad);border-color:var(--bad);color:#fff}
+.inv{list-style:none;margin:0;padding:6px 16px 8px}.inv li{display:flex;gap:9px;padding:3px 0;font-size:13px}.dot{flex:none;width:17px;height:17px;display:grid;place-items:center;font-size:11px;font-weight:800;background:var(--ok);color:#000;border-radius:50%}.dot.bad{background:var(--bad);color:#fff}
+.tabs{display:flex;border-bottom:1px solid #333;align-items:flex-end;padding:0 8px}.tabs button{background:none;border:0;border-bottom:3px solid transparent;color:#aaa;padding:9px 11px;font-weight:600;font-size:13px}.tabs button.on{color:#fff;border-color:var(--brand)}.tabs .sp{flex:1}.tabs select{background:#222;color:#eee;border:1px solid #444;margin-bottom:5px;font-size:12px}
+#pane{flex:1;overflow:auto;min-height:0;font-size:13px}
+#trace{font:12px/1.5 var(--mono);padding:10px 14px}.ev{display:grid;grid-template-columns:18px 112px 1fr;gap:6px;white-space:pre-wrap;overflow-wrap:anywhere}.ev .t{color:#777}.ev .k{font-weight:700}
+.k-user_msg{color:#6cc7f5}.k-agent_msg{color:#6fe39a}.k-state{color:#f5d04a}.k-tool_call,.k-tool_result{color:#c4a9ee}.k-approval_granted,.k-approval_consumed{color:#6fe39a}
+.k-approval_voided,.k-limit,.k-untrusted_flagged,.k-book_timeout,.k-error{color:#ff8466}.k-recover,.k-retry,.k-proposal_shown{color:var(--brand)}
+.pad{padding:10px 16px}.pad p{color:#aaa;margin:0 0 8px}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:5px 6px;border-bottom:1px solid #2a2a2a}th{color:#999;font-weight:500}
+.tag{padding:1px 8px;border-radius:99px;font-size:11.5px;font-weight:700;background:#333}.tag.good{background:var(--ok);color:#fff}.tag.bad{background:var(--bad);color:#fff}.tag.warn{background:var(--warn);color:#000}
+.fr{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #2a2a2a}.fr button,.demo button{background:#2a2a2a;color:#eee;border:1px solid #444;border-radius:4px;padding:3px 9px;font-size:12px}.fr button:hover,.demo button:hover{border-color:var(--brand)}
+details.demo{border-top:1px solid #333;padding:8px 16px;font-size:12.5px;color:#bbb}details summary{cursor:pointer;font-weight:600}.demo .g{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:8px}.demo select{background:#222;color:#eee;border:1px solid #444;padding:3px}.demo .pri{background:var(--brand);color:#000;border-color:var(--brand);font-weight:700}
+</style></head><body>
+<header><div class="logo" aria-hidden="true">O</div><b>Orange Invest</b><span class="sub">Errands</span>
+<button id="pill" aria-expanded="false" title="Show what the agent is doing"><i></i><span id="pt">Under the hood</span></button></header>
+<div id="app">
+<div class="stage"><div id="feed"><div class="col" id="col"></div></div>
+ <div class="dock"><div class="col"><div class="chips" id="chips"></div>
+ <form id="f"><input id="in" autocomplete="off" placeholder="Describe what needs doing, in your own words" aria-label="Message"><button>Send</button></form></div></div></div>
+<aside id="hood" aria-label="Under the hood">
+ <h2>Under the hood <small>what the agent is really doing</small></h2>
+ <div class="kp" id="kp"></div><div class="pipe" id="pipe"></div><ul class="inv" id="inv"></ul>
+ <div class="tabs" id="tabs"></div><div id="pane"></div>
+ <details class="demo"><summary>Demo controls</summary><div class="g">
+  <select id="script"><option value="">Provider: normal</option><option value="timeout_booked">Timeout after success</option><option value="timeout_not_booked,success">Timeout, then ok</option><option value="slot_taken,success">Slot taken, then ok</option></select>
+  <label><input type="checkbox" id="drift"> price drift</label><label><input type="checkbox" id="evasive"> sneaky injection</label><label><input type="checkbox" id="c503"> cancel 503</label>
+  <button id="new" class="pri">New session</button></div><div class="g">
+  <button id="skip">Skip 11 min</button><select id="crash"><option value="">No crash</option><option value="after_book_call">Crash after book()</option><option value="before_book_call">Crash before book()</option></select><button id="restart">Restart agent</button></div></details>
+</aside></div>
+<script>
+const SAFETY=new Set(["approval_granted","approval_consumed","approval_voided","approval_refused","proposal_shown","limit","untrusted_flagged","book_timeout","retry","error","recover","verification_mismatch","duplicate_confirmation_ignored","memory_forget","memory_confirm","memory_inference_refused"]);
+const STEP={COLLECTING:0,PRESENTING:1,AWAITING_APPROVAL:2,EXECUTING:4,VERIFYING:5,DONE:6},STEPS=["Details","Search","Propose","Approve","Book","Verify"];
+const TILES=[["🔧","Plumber","Find a plumber for my kitchen tap this week, mornings only, under ₹1,500 in Baner"],["💡","Electrician","Book the same electrician as last time, but not before 10 a.m. in Baner this week"],["❄️","AC servicing","Find AC servicing in Baner this week"]];
+const SVC={ac_service:"AC servicing",plumber:"plumber",electrician:"electrician"};
+let tab="trace",filter="all",ti=0,events=[],S=null,busy=false,chat=[],sigF="",sigH="";
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
+const BASE=(location.origin&&location.origin!=="null"&&location.protocol!=="file:")?"":"http://127.0.0.1:8765";
+const api=(p,b)=>fetch(BASE+p,b===undefined?{}:{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json()).catch(err=>{console.error("API error",p,err);return null});
+const fmt=s=>{try{const iso=s.includes("T")?(s.endsWith("Z")?s:s+":00Z"):s;return new Date(iso).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"UTC"})}catch(e){return s}};
+const day=s=>fmt(s).split(",")[0],hm=s=>s.slice(11,16),inr=n=>"₹"+Number(n).toLocaleString("en-IN");
+const clean=t=>t.split("\n").filter(l=>!/^\s{2}(\d+\.|BOOK|CANCEL|RESCHEDULE)/.test(l)&&!/^(Please confirm this exact|Reply 'yes'|Reply with a number|The slot is held|Available new slots)/.test(l)&&!/^\s+- p_/.test(l)&&!/^Review notes/.test(l)).join("\n").trim();
+async function send(text,label){if(busy||!text.trim())return;busy=true;chat.push({r:"u",t:label||text});$("in").value="";drawFeed(true);
+  const r=await api("/api/chat",{text})||{};busy=false;
+  if(r.crashed&&!r.reply)chat.push({r:"s",t:"The agent process crashed mid-booking. Open Demo controls and press Restart: it must check with the provider before doing anything."});
+  else{const c=clean(r.reply||"");if(c)chat.push({r:"a",t:c,bad:/couldn't|no longer|Heads-up|limit|wrong|can't tell/.test(r.reply||"")})}
+  await refresh(true)}
+async function refresh(force){const stateData=await api("/api/state");if(stateData&&!stateData.error)S=stateData;const t=await api("/api/trace?after="+ti);if(Array.isArray(t)&&t.length){ti=t[t.length-1].i+1;events.push(...t)}drawFeed(force);drawHood()}
+function drawFeed(force){
+  const sig=JSON.stringify([chat.length,busy,S&&S.state,S&&S.options.length,S&&S.pending&&S.pending.slot+S.pending.price,S&&S.result&&S.result.booking_id,S&&S.bookings.map(b=>b.id+b.status+b.slot)]);
+  if(S&&sig===sigF&&!force){tick();return}sigF=sig;const c=$("col");c.replaceChildren();
+  if(!chat.length){const h=el("div","hero");h.innerHTML="<h1>What needs doing <em>at home?</em></h1><p>Tell me in your own words. I'll find a provider, hold the slot, and ask you before anything is booked, changed or cancelled.</p>";c.append(h);
+    const t=el("div","tiles");TILES.forEach(([i,n,q])=>{const b=el("button","tile");b.append(el("span","",i),el("b","",n),el("small","","Search this week"));b.onclick=()=>send(q);t.append(b)});c.append(t);
+    const bk=(S?S.bookings:[]).filter(b=>b.status==="booked");if(bk.length){c.append(el("div","sec","Your upcoming bookings"));bk.forEach(b=>{const r=el("div","bk"),d=el("div");d.append(el("b","",`${b.provider_name} · ${SVC[b.service]}`),el("small","",`${fmt(b.slot)} · ${inr(b.price)} · ${b.id}`));
+      const m=el("button","","Move to Saturday"),x=el("button","","Cancel");m.onclick=()=>send(`Move my ${SVC[b.service]} to Saturday`);x.onclick=()=>send(`Cancel my ${SVC[b.service]}`);r.append(d,m,x);c.append(r)})}}
+  chat.forEach(m=>c.append(el("div","m "+m.r+(m.bad?" bad":""),m.t)));
+  if(busy){const t=el("div","m a typing");t.append(el("i"),el("i"),el("i"));c.append(t)}
+  if(S&&!busy){
+    if(S.state==="PRESENTING"&&S.options.length){const o=el("div","opts");S.options.forEach((p,i)=>{const b=el("button","pc");b.append(el("div","av",p.name[0]),el("b","",p.name),el("div","pr",inr(p.price)),el("small","",`★ ${p.rating} · technician ${p.technician}`));
+      const s=el("small");s.style.gridColumn="2/4";s.append(el("span","chip",day(p.slot)),el("span","chip",hm(p.slot)));b.append(s);b.onclick=()=>send(String(i+1),`${p.name} · ${day(p.slot)} ${hm(p.slot)}`);o.append(b)});c.append(o)}
+    if(S.state==="AWAITING_APPROVAL"&&S.pending){const p=S.pending,m=S.meta,sh=el("div","sheet"),L={book:"Confirm booking",cancel:"Confirm cancellation",reschedule:"Confirm new time"};
+      sh.append(el("div","top",L[p.action]));const d=el("dl");
+      const rows=[["Provider",`${m.provider_name}`],[p.action==="reschedule"?"From":"When",p.action==="reschedule"?fmt(p.old_slot):fmt(p.slot)]];if(p.action==="reschedule")rows.push(["To",fmt(p.slot)]);if(p.booking_id)rows.push(["Booking",p.booking_id]);
+      rows.forEach(([k,v])=>{d.append(el("dt","",k),el("dd","",v))});const t=el("dd","tot",inr(p.price));d.append(el("dt","","Price"),t);sh.append(d);
+      if(S.hold){const b=el("div","bar");b.append(el("i"));b.id="hold";sh.append(b);const ht=el("div","fine");ht.id="holdt";sh.append(ht)}
+      sh.append(el("div","perf"),(()=>{const f=el("div","fine");f.append("Your approval covers exactly these details. If the price, slot or provider changes, it stops applying and I'll ask again. ",el("code","","ref "+(S.shown||"")));return f})());
+      const bt=el("div","btns"),y=el("button","go",p.action==="book"?"Approve and book":p.action==="cancel"?"Approve cancellation":"Approve change"),n=el("button","no","Not now");y.onclick=()=>send("yes","Approved");n.onclick=()=>send("no","Not now");bt.append(y,n);sh.append(bt);c.append(sh)}
+    if(S.state==="DONE"&&S.result){const r=S.result,k=el("div","ticket"),vb={book:"Booked",cancel:"Cancelled",reschedule:"Rescheduled"}[r.action];
+      k.append(el("div","ver","✓ Verified with the provider"),el("h3","",`${vb}: ${r.provider_name}`),el("div","",`${fmt(r.slot)} · ${inr(r.price)}`),el("small","","Reference "+r.booking_id));c.append(k)}}
+  const ch=$("chips");ch.replaceChildren();if(S&&["DONE","FAILED"].includes(S.state)||(S&&S.state==="IDLE"&&chat.length)){const bks=(S&&S.bookings)?S.bookings.filter(b=>b.status==="booked"):[];const latest=bks.length?bks[bks.length-1]:null;const chips=[];if(latest){const sName=SVC[latest.service]||latest.service||"service";chips.push(`Move my ${sName} to Saturday`,`Cancel my ${sName}`)}chips.push("What do you remember");chips.forEach(x=>{const b=el("button","",x);b.onclick=()=>send(x);ch.append(b)})}
+  $("feed").scrollTop=chat.length?1e9:0;tick()}
+function tick(){if(!S)return;const b=$("hold"),t=$("holdt");if(b&&S.hold){const left=Math.max(0,S.hold.expires_at-S.clock);b.firstChild.style.width=Math.min(100,left/6)+"%";t.textContent=left>0?`Slot held for you for ${Math.ceil(left/60)} more min`:"Hold expired: I'll re-check the price before booking"}}
+function evText(e){if(e.kind==="state")return `${e.frm} → ${e.to}  ${e.why||""}`;if(e.kind==="user_msg"||e.kind==="agent_msg")return e.text;
+  if(e.kind==="tool_call")return `${e.tool} ${JSON.stringify(e.args)}`;if(e.kind==="tool_result")return `${e.tool} → ${e.outcome}${e.code?" "+e.code:""} ${e.result?JSON.stringify(e.result).slice(0,120):""}`;
+  if(e.kind==="model_call")return `${e.fn}${e.accepted===false?"  REJECTED: "+e.rejected_reason:""}`;const o={...e};["i","n","t","run","turn","kind"].forEach(k=>delete o[k]);return JSON.stringify(o)}
+function drawHood(){if(!S)return;
+  const sig=events.length+tab+filter+JSON.stringify([S.approvals,S.bookings,S.memory,S.provider_calls,S.state,S.budget,S.approved_mutations]);if(sig===sigH)return;sigH=sig;
+  const fl=events.filter(e=>e.kind==="untrusted_flagged").reduce((a,e)=>a+(e.withheld||0),0),vd=S.approvals.filter(a=>a.status==="voided").length;
+  const kp=$("kp");kp.replaceChildren();[["Provider calls",S.provider_calls],["Approvals ok / voided",`${S.approvals.length-vd} / ${vd}`],["Reviews withheld",fl]].forEach(([l,v])=>{const d=el("div");d.append(el("b","",v),el("small","",l));kp.append(d)});
+  let reach=-1;events.forEach(e=>{if(e.kind==="state"&&STEP[e.to]!==undefined)reach=Math.max(reach,STEP[e.to])});if(S.approvals.some(x=>x.status!=="voided")&&reach<4)reach=Math.max(reach,3);
+  $("pipe").replaceChildren(...STEPS.map((n,i)=>{const d=S.state==="DONE"||i<reach,a=!d&&i===reach&&S.state!=="FAILED",bd=S.state==="FAILED"&&i===reach,s=el("div","stp "+(d?"done":a?"act":bd?"bad":""));s.append(el("i","",d?"✓":i+1),el("span","",n));return s}));
+  const dup=Object.values(S.creations).some(v=>v.length>1)||(()=>{const k=S.bookings.filter(b=>b.status==="booked").map(b=>b.provider_id+b.slot);return new Set(k).size!==k.length})();
+  const ver=S.state!=="DONE"||!S.result||S.bookings.some(b=>b.id===S.result.booking_id);
+  const L=[[S.provider_mutations===S.approved_mutations,`${S.provider_mutations} change(s) at the provider, each covered by an approval`],[!dup,dup?"Duplicate booking detected":"No duplicate bookings"],[ver,"Success claimed only after the provider confirms"],[true,fl?`${fl} review(s) treated as data and withheld`:"Reviews are data, never instructions"]];
+  $("inv").replaceChildren(...L.map(([ok,t])=>{const li=el("li");li.append(el("span","dot"+(ok?"":" bad"),ok?"✓":"!"),el("span","",t));return li}));
+  const bad=L.some(x=>!x[0]);$("pill").className=bad?"bad":"";$("pt").textContent=bad?"Guarantee broken":`${L.length}/${L.length} guarantees holding`;
+  const names={trace:"Live trace",ledger:"Approvals",prov:"Provider",mem:"Memory"},tb=$("tabs");tb.replaceChildren();
+  Object.entries(names).forEach(([k,v])=>{const b=el("button",tab===k?"on":"",v);b.onclick=()=>{tab=k;sigH="";drawHood()};tb.append(b)});tb.append(el("span","sp"));
+  if(tab==="trace"){const f=el("select");[["all","All events"],["safety","Safety only"],["tools","Tool calls"]].forEach(([v,t])=>{const o=el("option","",t);o.value=v;f.append(o)});f.value=filter;f.onchange=()=>{filter=f.value;sigH="";drawHood()};tb.append(f)}
+  const p=$("pane");
+  if(tab==="trace"){const t=el("div");t.id="trace";events.filter(e=>filter==="all"||(filter==="safety"&&(SAFETY.has(e.kind)||(e.kind==="model_call"&&e.accepted===false)))||(filter==="tools"&&e.kind.startsWith("tool_"))).forEach(e=>{
+      const r=el("div","ev");r.append(el("span","t",e.turn),el("span","k k-"+e.kind,e.kind),el("span","",evText(e)));t.append(r)});
+    const near=p.scrollHeight-p.scrollTop-p.clientHeight<80;p.replaceChildren(t);if(near)p.scrollTop=1e9;return}
+  const w=el("div","pad");
+  if(tab==="ledger"){w.append(el("p","","A record the code checks before any book, cancel or reschedule. Change the provider, slot or price and the digest no longer matches."));
+    const t=el("table");t.innerHTML="<tr><th>id</th><th>digest</th><th>status</th><th>reason</th></tr>";S.approvals.forEach(a=>{const r=el("tr");[a.approval_id,a.digest.slice(0,10),null,a.reason||""].forEach((v,i)=>{const d=el("td","",v===null?"":v);if(i===2)d.append(el("span","tag "+({consumed:"good",voided:"bad"}[a.status]||"warn"),a.status));r.append(d)});t.append(r)});w.append(t);if(!S.approvals.length)w.append(el("p","","None yet, so nothing can be booked."))}
+  if(tab==="prov"){w.append(el("p","",`The provider's own records, independent of what the agent says. ${S.provider_calls} calls so far.`));const t=el("table");t.innerHTML="<tr><th>id</th><th>provider</th><th>when</th><th>status</th></tr>";
+    S.bookings.slice().sort((a,b)=>a.slot<b.slot?1:-1).forEach(b=>{const r=el("tr");[b.id,b.provider_name,fmt(b.slot)].forEach(v=>r.append(el("td","",v)));const d=el("td");d.append(el("span","tag "+({booked:"good",cancelled:"bad"}[b.status]||""),b.status));r.append(d);t.append(r)});w.append(t)}
+  if(tab==="mem"){w.append(el("p","","Saved after a booking. Inferred facts are never used until you confirm them."));if(!S.memory.length)w.append(el("p","","Nothing saved yet."));const lab={area:"area",earliest_time:"time",preferred_technician:"technician"};
+    S.memory.forEach(f=>{const r=el("div","fr");r.append(el("b","",f.key.replace("_"," ")),el("span","",String(f.value)),el("span","tag "+(f.source==="stated"||f.confirmed?"good":"warn"),f.source==="stated"?"stated":f.confirmed?"confirmed":"inferred, unused"));
+      if(f.source==="inferred"&&!f.confirmed){const c=el("button","","Use it");c.onclick=()=>send("remember "+f.value);r.append(c)}const x=el("button","","Forget");x.style.marginLeft="auto";x.onclick=()=>send("forget my "+lab[f.key]);r.append(x);w.append(r)})}
+  p.replaceChildren(w)}
+$("f").onsubmit=e=>{e.preventDefault();send($("in").value)};
+$("pill").onclick=()=>{const o=$("app").classList.toggle("open");$("pill").setAttribute("aria-expanded",o)};
+$("new").onclick=async()=>{events=[];ti=0;chat=[];sigH="";await api("/api/new",{script:$("script").value,drift:$("drift").checked,evasive:$("evasive").checked,cancel503:$("c503").checked});refresh(true)};
+$("skip").onclick=async()=>{await api("/api/advance",{seconds:660});chat.push({r:"s",t:"11 minutes passed: any slot hold has expired."});refresh(true)};
+$("crash").onchange=()=>api("/api/crash",{point:$("crash").value});
+$("restart").onclick=async()=>{const r=await api("/api/restart",{});chat.push({r:"s",t:"Agent restarted from its saved state."});if(r.reply){const c=clean(r.reply);if(c)chat.push({r:"a",t:c})}refresh(true)};
+if(innerWidth>=1000){$("app").classList.add("open");$("pill").setAttribute("aria-expanded",true)}
+refresh(true);setInterval(()=>{if(!busy)refresh()},900);
+</script></body></html>

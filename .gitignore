@@ -1,0 +1,16 @@
+# Secrets & environment
+.env
+.env.*
+*.key
+
+# Python cache & tests
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Runtime traces & SQLite DBs
+traces/web/*.db
+traces/web/*.jsonl
+traces/web/
+*.db
