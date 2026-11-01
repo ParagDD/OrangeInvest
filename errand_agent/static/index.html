@@ -80,6 +80,7 @@ form input:focus-visible{outline:0}form:focus-within{box-shadow:0 0 0 3px var(--
 details.demo{border-top:1px solid #333;padding:8px 16px;font-size:12.5px;color:#bbb}details summary{cursor:pointer;font-weight:600}.demo .g{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:8px}.demo select{background:#222;color:#eee;border:1px solid #444;padding:3px}.demo .pri{background:var(--brand);color:#000;border-color:var(--brand);font-weight:700}
 </style></head><body>
 <header><div class="logo" aria-hidden="true">O</div><b>Orange Invest</b><span class="sub">Errands</span>
+<span id="model-tag" style="background:#222;color:#ff7900;border:1px solid #444;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;margin-left:6px">AI: loading...</span>
 <button id="pill" aria-expanded="false" title="Show what the agent is doing"><i></i><span id="pt">Under the hood</span></button></header>
 <div id="app">
 <div class="stage"><div id="feed"><div class="col" id="col"></div></div>
@@ -142,6 +143,7 @@ function evText(e){if(e.kind==="state")return `${e.frm} → ${e.to}  ${e.why||""
   if(e.kind==="tool_call")return `${e.tool} ${JSON.stringify(e.args)}`;if(e.kind==="tool_result")return `${e.tool} → ${e.outcome}${e.code?" "+e.code:""} ${e.result?JSON.stringify(e.result).slice(0,120):""}`;
   if(e.kind==="model_call")return `${e.fn}${e.accepted===false?"  REJECTED: "+e.rejected_reason:""}`;const o={...e};["i","n","t","run","turn","kind"].forEach(k=>delete o[k]);return JSON.stringify(o)}
 function drawHood(){if(!S)return;
+  if(S.model&&$("model-tag"))$("model-tag").textContent=S.model;
   const sig=events.length+tab+filter+JSON.stringify([S.approvals,S.bookings,S.memory,S.provider_calls,S.state,S.budget,S.approved_mutations]);if(sig===sigH)return;sigH=sig;
   const fl=events.filter(e=>e.kind==="untrusted_flagged").reduce((a,e)=>a+(e.withheld||0),0),vd=S.approvals.filter(a=>a.status==="voided").length;
   const kp=$("kp");kp.replaceChildren();[["Provider calls",S.provider_calls],["Approvals ok / voided",`${S.approvals.length-vd} / ${vd}`],["Reviews withheld",fl]].forEach(([l,v])=>{const d=el("div");d.append(el("b","",v),el("small","",l));kp.append(d)});

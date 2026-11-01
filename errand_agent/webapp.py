@@ -11,6 +11,7 @@ from .agent import Agent
 from .clock import FakeClock
 from .errors import SimulatedCrash
 from .mocks import ProviderAPI, Scenario
+from .llm import get_default_model
 from .model import RuleModel
 from .store import Store
 
@@ -43,7 +44,8 @@ class Console:
         if self.store:
             self.store.close()
         self.store = Store(self.db)
-        self.agent = Agent(user_id=self.user, session_id=self.sid, api=self.api, model=RuleModel(), store=self.store,
+        self.model = get_default_model()
+        self.agent = Agent(user_id=self.user, session_id=self.sid, api=self.api, model=self.model, store=self.store,
                            clock=self.clock, trace_path=self.trace)
 
     def chat(self, text):
@@ -75,7 +77,9 @@ class Console:
         with self.lock:
             s, db = self.agent.s, self.store.db
             rows = lambda q: [dict(r) for r in db.execute(q).fetchall()]
+            model_name = getattr(self.model, "deployment", type(self.model).__name__)
             return {"sid": self.sid, "crashed": self.crashed, "state": s.state, "action": s.action,
+                    "model": model_name,
                     "slots": s.slots, "options": s.options, "pending": s.pending, "meta": s.pending_meta,
                     "shown": s.shown_digest, "hold": s.hold, "clock": self.clock.now(), "result": s.result,
                     "memory": self.agent.memory.view(self.user), "turns": s.turns,
