@@ -11,8 +11,9 @@ button,select,input{font:inherit;color:inherit}button{cursor:pointer}
 button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
 header{flex:none;height:60px;background:#000;color:#fff;display:flex;align-items:center;gap:12px;padding:0 20px}
 .logo{width:34px;height:34px;background:var(--brand);color:#000;font-weight:900;font-size:19px;display:grid;place-items:center}
-header b{font-size:17px;letter-spacing:-.2px;white-space:nowrap}@media(max-width:600px){header span.sub{display:none}header{padding:0 12px}#pill{font-size:12px;padding:6px 10px}#feed{padding:18px 14px 8px}.dock{padding:8px 14px 12px}}header span.sub{color:#9a9a9a;font-size:13px}
-#pill{margin-left:auto;display:flex;align-items:center;gap:8px;background:#1f1f1f;border:1px solid #333;color:#fff;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600}
+header b{font-size:17px;letter-spacing:-.2px;white-space:nowrap}@media(max-width:600px){header span.sub{display:none}header{padding:0 12px}#pill{font-size:12px;padding:6px 10px}#btn-cat{font-size:12px;padding:6px 10px}#feed{padding:18px 14px 8px}.dock{padding:8px 14px 12px}}header span.sub{color:#9a9a9a;font-size:13px}
+#btn-cat{margin-left:auto;display:flex;align-items:center;gap:6px;background:#1f1f1f;border:1px solid #333;color:#fff;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer}#btn-cat:hover{border-color:var(--brand)}
+#pill{margin-left:0;display:flex;align-items:center;gap:8px;background:#1f1f1f;border:1px solid #333;color:#fff;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600}
 #pill:hover{border-color:var(--brand)}#pill i{width:9px;height:9px;border-radius:50%;background:var(--ok)}#pill.bad i{background:var(--bad)}
 #app{flex:1;min-height:0;display:grid;grid-template-columns:1fr 0;transition:grid-template-columns .25s}
 #app.open{grid-template-columns:1fr minmax(380px,34%)}
@@ -78,9 +79,36 @@ form input:focus-visible{outline:0}form:focus-within{box-shadow:0 0 0 3px var(--
 .tag{padding:1px 8px;border-radius:99px;font-size:11.5px;font-weight:700;background:#333}.tag.good{background:var(--ok);color:#fff}.tag.bad{background:var(--bad);color:#fff}.tag.warn{background:var(--warn);color:#000}
 .fr{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #2a2a2a}.fr button,.demo button{background:#2a2a2a;color:#eee;border:1px solid #444;border-radius:4px;padding:3px 9px;font-size:12px}.fr button:hover,.demo button:hover{border-color:var(--brand)}
 details.demo{border-top:1px solid #333;padding:8px 16px;font-size:12.5px;color:#bbb}details summary{cursor:pointer;font-weight:600}.demo .g{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:8px}.demo select{background:#222;color:#eee;border:1px solid #444;padding:3px}.demo .pri{background:var(--brand);color:#000;border-color:var(--brand);font-weight:700}
+.dir-banner{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;cursor:pointer}
+.dir-banner:hover{border-color:var(--ink);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.dir-banner b{display:block;font-size:13.5px;color:var(--ink)}
+.dir-banner small{color:var(--mut);font-size:12px}
+.dir-banner button{background:#000;color:#fff;border:0;padding:6px 14px;border-radius:99px;font-weight:700;font-size:12px;white-space:nowrap;cursor:pointer}
+.dir-banner button:hover{background:var(--brand);color:#000}
+.cat-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cat-filters button{background:#222;color:#aaa;border:1px solid #444;border-radius:99px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer}
+.cat-filters button.on{background:var(--brand);color:#000;border-color:var(--brand);font-weight:700}
+.cat-card{background:#202020;border:1px solid #333;border-radius:6px;padding:12px 14px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px}
+.cat-card:hover{border-color:#555}
+.cat-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.cat-name{font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px}
+.cat-price{font-size:15px;font-weight:800;color:var(--brand);text-align:right}
+.cat-info{font-size:12px;color:#aaa;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cat-badge{font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;background:#333;color:#eee}
+.cat-badge.pref{background:var(--ok);color:#fff}
+.cat-badge.inj{background:var(--bad);color:#fff}
+.cat-slots{font-size:11.5px;color:#bbb;background:#181818;border-radius:4px;padding:6px 8px;margin-top:2px}
+.cat-slots b{color:#eee}
+.cat-foot{display:flex;justify-content:space-between;align-items:center;margin-top:4px;gap:8px}
+.cat-book-btn{background:#333;color:#fff;border:1px solid #555;border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer}
+.cat-book-btn:hover{background:var(--brand);color:#000;border-color:var(--brand)}
+.cat-revs{margin-top:6px;font-size:12px;color:#999;border-top:1px dashed #333;padding-top:6px}
+.cat-revs summary{cursor:pointer;color:#aaa;font-weight:600}
+.cat-rev{margin:4px 0;background:#1a1a1a;padding:5px 8px;border-radius:4px}
 </style></head><body>
 <header><div class="logo" aria-hidden="true">O</div><b>Orange Invest</b><span class="sub">Errands</span>
 <span id="model-tag" style="background:#222;color:#ff7900;border:1px solid #444;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;margin-left:6px">AI: loading...</span>
+<button id="btn-cat" title="Explore local provider catalog"><span style="color:var(--brand)">📋</span><span>Catalog (10)</span></button>
 <button id="pill" aria-expanded="false" title="Show what the agent is doing"><i></i><span id="pt">Under the hood</span></button></header>
 <div id="app">
 <div class="stage"><div id="feed"><div class="col" id="col"></div></div>
@@ -101,7 +129,8 @@ const SAFETY=new Set(["approval_granted","approval_consumed","approval_voided","
 const STEP={COLLECTING:0,PRESENTING:1,AWAITING_APPROVAL:2,EXECUTING:4,VERIFYING:5,DONE:6},STEPS=["Details","Search","Propose","Approve","Book","Verify"];
 const TILES=[["🔧","Plumber","Find a plumber for my kitchen tap this week, mornings only, under ₹1,500 in Baner"],["💡","Electrician","Book the same electrician as last time, but not before 10 a.m. in Baner this week"],["❄️","AC servicing","Find AC servicing in Baner this week"]];
 const SVC={ac_service:"AC servicing",plumber:"plumber",electrician:"electrician"};
-let tab="trace",filter="all",ti=0,events=[],S=null,busy=false,chat=[],sigF="",sigH="";
+let tab="trace",filter="all",catFilter="all",ti=0,events=[],S=null,busy=false,chat=[],sigF="",sigH="";
+function openCatalog(svc){if(svc)catFilter=svc;tab="cat";$("app").classList.add("open");$("pill").setAttribute("aria-expanded",true);sigH="";drawHood()}
 const $=id=>document.getElementById(id);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
 const BASE=(location.origin&&location.origin!=="null"&&location.protocol!=="file:")?"":"http://127.0.0.1:8765";
@@ -120,6 +149,7 @@ function drawFeed(force){
   if(S&&sig===sigF&&!force){tick();return}sigF=sig;const c=$("col");c.replaceChildren();
   if(!chat.length){const h=el("div","hero");h.innerHTML="<h1>What needs doing <em>at home?</em></h1><p>Tell me in your own words. I'll find a provider, hold the slot, and ask you before anything is booked, changed or cancelled.</p>";c.append(h);
     const t=el("div","tiles");TILES.forEach(([i,n,q])=>{const b=el("button","tile");b.append(el("span","",i),el("b","",n),el("small","","Search this week"));b.onclick=()=>send(q);t.append(b)});c.append(t);
+    const bnr=el("div","dir-banner");const bL=el("div");bL.append(el("b","","Browse Verified Provider Directory (10 Providers)"),el("small","","Plumbers, electricians & AC experts with live slots in Baner & Koregaon Park"));const bB=el("button","","View Catalog Data →");bB.onclick=e=>{e.stopPropagation();openCatalog()};bnr.onclick=()=>openCatalog();bnr.append(bL,bB);c.append(bnr);
     const bk=(S?S.bookings:[]).filter(b=>b.status==="booked");if(bk.length){c.append(el("div","sec","Your upcoming bookings"));bk.forEach(b=>{const r=el("div","bk"),d=el("div");d.append(el("b","",`${b.provider_name} · ${SVC[b.service]}`),el("small","",`${fmt(b.slot)} · ${inr(b.price)} · ${b.id}`));
       const m=el("button","","Move to Saturday"),x=el("button","","Cancel");m.onclick=()=>send(`Move my ${SVC[b.service]} to Saturday`);x.onclick=()=>send(`Cancel my ${SVC[b.service]}`);r.append(d,m,x);c.append(r)})}}
   chat.forEach(m=>c.append(el("div","m "+m.r+(m.bad?" bad":""),m.t)));
@@ -136,7 +166,7 @@ function drawFeed(force){
       const bt=el("div","btns"),y=el("button","go",p.action==="book"?"Approve and book":p.action==="cancel"?"Approve cancellation":"Approve change"),n=el("button","no","Not now");y.onclick=()=>send("yes","Approved");n.onclick=()=>send("no","Not now");bt.append(y,n);sh.append(bt);c.append(sh)}
     if(S.state==="DONE"&&S.result){const r=S.result,k=el("div","ticket"),vb={book:"Booked",cancel:"Cancelled",reschedule:"Rescheduled"}[r.action];
       k.append(el("div","ver","✓ Verified with the provider"),el("h3","",`${vb}: ${r.provider_name}`),el("div","",`${fmt(r.slot)} · ${inr(r.price)}`),el("small","","Reference "+r.booking_id));c.append(k)}}
-  const ch=$("chips");ch.replaceChildren();if(S&&["DONE","FAILED"].includes(S.state)||(S&&S.state==="IDLE"&&chat.length)){const bks=(S&&S.bookings)?S.bookings.filter(b=>b.status==="booked"):[];const latest=bks.length?bks[bks.length-1]:null;const chips=[];if(latest){const sName=SVC[latest.service]||latest.service||"service";chips.push(`Move my ${sName} to Saturday`,`Cancel my ${sName}`)}chips.push("What do you remember");chips.forEach(x=>{const b=el("button","",x);b.onclick=()=>send(x);ch.append(b)})}
+  const ch=$("chips");ch.replaceChildren();if(S&&["DONE","FAILED"].includes(S.state)||(S&&S.state==="IDLE"&&chat.length)){const bks=(S&&S.bookings)?S.bookings.filter(b=>b.status==="booked"):[];const latest=bks.length?bks[bks.length-1]:null;const chips=[];if(latest){const sName=SVC[latest.service]||latest.service||"service";chips.push(`Move my ${sName} to Saturday`,`Cancel my ${sName}`)}chips.push("Browse provider catalog","What do you remember");chips.forEach(x=>{const b=el("button","",x);b.onclick=()=>{if(x==="Browse provider catalog"){openCatalog();return}send(x)};ch.append(b)})}
   $("feed").scrollTop=chat.length?1e9:0;tick()}
 function tick(){if(!S)return;const b=$("hold"),t=$("holdt");if(b&&S.hold){const left=Math.max(0,S.hold.expires_at-S.clock);b.firstChild.style.width=Math.min(100,left/6)+"%";t.textContent=left>0?`Slot held for you for ${Math.ceil(left/60)} more min`:"Hold expired: I'll re-check the price before booking"}}
 function evText(e){if(e.kind==="state")return `${e.frm} → ${e.to}  ${e.why||""}`;if(e.kind==="user_msg"||e.kind==="agent_msg")return e.text;
@@ -144,7 +174,7 @@ function evText(e){if(e.kind==="state")return `${e.frm} → ${e.to}  ${e.why||""
   if(e.kind==="model_call")return `${e.fn}${e.accepted===false?"  REJECTED: "+e.rejected_reason:""}`;const o={...e};["i","n","t","run","turn","kind"].forEach(k=>delete o[k]);return JSON.stringify(o)}
 function drawHood(){if(!S)return;
   if(S.model&&$("model-tag"))$("model-tag").textContent=S.model;
-  const sig=events.length+tab+filter+JSON.stringify([S.approvals,S.bookings,S.memory,S.provider_calls,S.state,S.budget,S.approved_mutations]);if(sig===sigH)return;sigH=sig;
+  const sig=events.length+tab+filter+catFilter+JSON.stringify([S.approvals,S.bookings,S.memory,S.provider_calls,S.state,S.budget,S.approved_mutations,S.catalog]);if(sig===sigH)return;sigH=sig;
   const fl=events.filter(e=>e.kind==="untrusted_flagged").reduce((a,e)=>a+(e.withheld||0),0),vd=S.approvals.filter(a=>a.status==="voided").length;
   const kp=$("kp");kp.replaceChildren();[["Provider calls",S.provider_calls],["Approvals ok / voided",`${S.approvals.length-vd} / ${vd}`],["Reviews withheld",fl]].forEach(([l,v])=>{const d=el("div");d.append(el("b","",v),el("small","",l));kp.append(d)});
   let reach=-1;events.forEach(e=>{if(e.kind==="state"&&STEP[e.to]!==undefined)reach=Math.max(reach,STEP[e.to])});if(S.approvals.some(x=>x.status!=="voided")&&reach<4)reach=Math.max(reach,3);
@@ -154,7 +184,7 @@ function drawHood(){if(!S)return;
   const L=[[S.provider_mutations===S.approved_mutations,`${S.provider_mutations} change(s) at the provider, each covered by an approval`],[!dup,dup?"Duplicate booking detected":"No duplicate bookings"],[ver,"Success claimed only after the provider confirms"],[true,fl?`${fl} review(s) treated as data and withheld`:"Reviews are data, never instructions"]];
   $("inv").replaceChildren(...L.map(([ok,t])=>{const li=el("li");li.append(el("span","dot"+(ok?"":" bad"),ok?"✓":"!"),el("span","",t));return li}));
   const bad=L.some(x=>!x[0]);$("pill").className=bad?"bad":"";$("pt").textContent=bad?"Guarantee broken":`${L.length}/${L.length} guarantees holding`;
-  const names={trace:"Live trace",ledger:"Approvals",prov:"Provider",mem:"Memory"},tb=$("tabs");tb.replaceChildren();
+  const names={trace:"Live trace",ledger:"Approvals",cat:"Catalog",prov:"Bookings",mem:"Memory"},tb=$("tabs");tb.replaceChildren();
   Object.entries(names).forEach(([k,v])=>{const b=el("button",tab===k?"on":"",v);b.onclick=()=>{tab=k;sigH="";drawHood()};tb.append(b)});tb.append(el("span","sp"));
   if(tab==="trace"){const f=el("select");[["all","All events"],["safety","Safety only"],["tools","Tool calls"]].forEach(([v,t])=>{const o=el("option","",t);o.value=v;f.append(o)});f.value=filter;f.onchange=()=>{filter=f.value;sigH="";drawHood()};tb.append(f)}
   const p=$("pane");
@@ -162,6 +192,65 @@ function drawHood(){if(!S)return;
       const r=el("div","ev");r.append(el("span","t",e.turn),el("span","k k-"+e.kind,e.kind),el("span","",evText(e)));t.append(r)});
     const near=p.scrollHeight-p.scrollTop-p.clientHeight<80;p.replaceChildren(t);if(near)p.scrollTop=1e9;return}
   const w=el("div","pad");
+  if(tab==="cat"){
+    const cat=S.catalog||[];
+    w.append(el("p","",`Verified provider database (${cat.length} providers across Baner & Koregaon Park). Click "Book this" to start an errand.`));
+    const flt=el("div","cat-filters");
+    const counts={all:cat.length,plumber:cat.filter(p=>p.service==="plumber").length,electrician:cat.filter(p=>p.service==="electrician").length,ac_service:cat.filter(p=>p.service==="ac_service").length};
+    [["all","All ("+counts.all+")"],["plumber","🔧 Plumbers ("+counts.plumber+")"],["electrician","💡 Electricians ("+counts.electrician+")"],["ac_service","❄️ AC ("+counts.ac_service+")"]].forEach(([k,l])=>{
+      const fb=el("button",catFilter===k?"on":"",l);
+      fb.onclick=()=>{catFilter=k;sigH="";drawHood()};
+      flt.append(fb);
+    });
+    w.append(flt);
+    const prefTech=(S.memory||[]).find(m=>m.key==="preferred_technician"&&m.confirmed);
+    const prefName=prefTech?String(prefTech.value).toLowerCase():"";
+    const filtered=cat.filter(p=>catFilter==="all"||p.service===catFilter);
+    if(!filtered.length){w.append(el("p","","No providers found for this service."));}
+    filtered.forEach(p=>{
+      const cd=el("div","cat-card");
+      const top=el("div","cat-top");
+      const sIcon={plumber:"🔧",electrician:"💡",ac_service:"❄️"}[p.service]||"🛠️";
+      const nm=el("div","cat-name");
+      nm.append(el("span","",sIcon),el("b","",p.name),el("small","","("+p.id+")"));
+      const pr=el("div","cat-price",inr(p.price));
+      top.append(nm,pr);cd.append(top);
+      const meta=el("div","cat-info");
+      meta.append(el("span","",`★ ${p.rating} (${p.reviews_count||(p.reviews&&p.reviews.length)||0} reviews)`));
+      meta.append(el("span","",`Technician: ${p.technician||"Assigned on booking"}`));
+      if(p.technician&&prefName&&p.technician.toLowerCase().includes(prefName)){
+        meta.append(el("span","cat-badge pref","★ Preferred technician"));
+      }
+      meta.append(el("span","cat-badge",`📍 ${(p.areas||[]).join(", ")}`));
+      cd.append(meta);
+      if(p.free_slots&&p.free_slots.length){
+        const sl=el("div","cat-slots");
+        sl.append(el("b","",`${p.free_slots.length} open slots this week: `));
+        const slotText=p.free_slots.map(s=>day(s)+" "+hm(s)).join(", ");
+        sl.append(el("span","",slotText));
+        cd.append(sl);
+      }
+      const foot=el("div","cat-foot");
+      const sName=SVC[p.service]||p.service;
+      const bBtn=el("button","cat-book-btn",`Book with ${p.name}`);
+      bBtn.onclick=()=>{send(`Find a ${sName} from ${p.name} in Baner this week`);};
+      foot.append(el("span","cat-badge",sName));
+      foot.append(bBtn);
+      cd.append(foot);
+      if(p.reviews&&p.reviews.length){
+        const det=el("details","cat-revs");
+        const hasInj=p.reviews.some(r=>typeof r.text==="string"&&r.text.includes("IGNORE ALL PREVIOUS"));
+        det.innerHTML=`<summary>Customer reviews (${p.reviews.length})${hasInj?' <span class="cat-badge inj">Prompt injection test</span>':''}</summary>`;
+        p.reviews.forEach(r=>{
+          const rv=el("div","cat-rev");
+          rv.innerHTML=`<b>★ ${r.rating}</b> <small>(${r.author||"Customer"}):</small> <i>${r.text}</i>`;
+          det.append(rv);
+        });
+        cd.append(det);
+      }
+      w.append(cd);
+    });
+  }
   if(tab==="ledger"){w.append(el("p","","A record the code checks before any book, cancel or reschedule. Change the provider, slot or price and the digest no longer matches."));
     const t=el("table");t.innerHTML="<tr><th>id</th><th>digest</th><th>status</th><th>reason</th></tr>";S.approvals.forEach(a=>{const r=el("tr");[a.approval_id,a.digest.slice(0,10),null,a.reason||""].forEach((v,i)=>{const d=el("td","",v===null?"":v);if(i===2)d.append(el("span","tag "+({consumed:"good",voided:"bad"}[a.status]||"warn"),a.status));r.append(d)});t.append(r)});w.append(t);if(!S.approvals.length)w.append(el("p","","None yet, so nothing can be booked."))}
   if(tab==="prov"){w.append(el("p","",`The provider's own records, independent of what the agent says. ${S.provider_calls} calls so far.`));const t=el("table");t.innerHTML="<tr><th>id</th><th>provider</th><th>when</th><th>status</th></tr>";
@@ -171,6 +260,7 @@ function drawHood(){if(!S)return;
       if(f.source==="inferred"&&!f.confirmed){const c=el("button","","Use it");c.onclick=()=>send("remember "+f.value);r.append(c)}const x=el("button","","Forget");x.style.marginLeft="auto";x.onclick=()=>send("forget my "+lab[f.key]);r.append(x);w.append(r)})}
   p.replaceChildren(w)}
 $("f").onsubmit=e=>{e.preventDefault();send($("in").value)};
+if($("btn-cat"))$("btn-cat").onclick=()=>openCatalog();
 $("pill").onclick=()=>{const o=$("app").classList.toggle("open");$("pill").setAttribute("aria-expanded",o)};
 $("new").onclick=async()=>{events=[];ti=0;chat=[];sigH="";await api("/api/new",{script:$("script").value,drift:$("drift").checked,evasive:$("evasive").checked,cancel503:$("c503").checked});refresh(true)};
 $("skip").onclick=async()=>{await api("/api/advance",{seconds:660});chat.push({r:"s",t:"11 minutes passed: any slot hold has expired."});refresh(true)};

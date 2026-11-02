@@ -78,6 +78,22 @@ class Console:
             s, db = self.agent.s, self.store.db
             rows = lambda q: [dict(r) for r in db.execute(q).fetchall()]
             model_name = getattr(self.model, "deployment", type(self.model).__name__)
+            catalog = [
+                {
+                    "id": p["id"],
+                    "name": p["name"],
+                    "service": p["service"],
+                    "price": p["price"],
+                    "rating": p["rating"],
+                    "technician": p.get("technician", ""),
+                    "areas": p.get("areas", ["Baner", "Koregaon Park"]),
+                    "slots_count": len(self.api.free.get(p["id"], [])),
+                    "free_slots": sorted(list(self.api.free.get(p["id"], []))),
+                    "reviews_count": len(p.get("reviews", [])),
+                    "reviews": p.get("reviews", []),
+                }
+                for p in self.api.providers.values()
+            ]
             return {"sid": self.sid, "crashed": self.crashed, "state": s.state, "action": s.action,
                     "model": model_name,
                     "slots": s.slots, "options": s.options, "pending": s.pending, "meta": s.pending_meta,
@@ -86,6 +102,7 @@ class Console:
                     "budget": {"model": self.agent.budget.model_calls, "tool": self.agent.budget.tool_calls},
                     "approvals": rows("SELECT approval_id,digest,status,seq,reason,booking_id FROM approvals ORDER BY seq"),
                     "bookings": list(self.api.bookings.values()),
+                    "catalog": catalog,
                     "creations": self.api.creations, "provider_calls": len(self.api.calls),
                     "provider_mutations": sum(c["tool"] in ("book", "cancel", "reschedule") for c in self.api.calls),
                     "approved_mutations": db.execute("SELECT COUNT(*) FROM mutations").fetchone()[0]}
