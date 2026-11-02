@@ -72,9 +72,10 @@ form input:focus-visible{outline:0}form:focus-within{box-shadow:0 0 0 3px var(--
 .inv{list-style:none;margin:0;padding:6px 16px 8px}.inv li{display:flex;gap:9px;padding:3px 0;font-size:13px}.dot{flex:none;width:17px;height:17px;display:grid;place-items:center;font-size:11px;font-weight:800;background:var(--ok);color:#000;border-radius:50%}.dot.bad{background:var(--bad);color:#fff}
 .tabs{display:flex;border-bottom:1px solid #333;align-items:flex-end;padding:0 8px}.tabs button{background:none;border:0;border-bottom:3px solid transparent;color:#aaa;padding:9px 11px;font-weight:600;font-size:13px}.tabs button.on{color:#fff;border-color:var(--brand)}.tabs .sp{flex:1}.tabs select{background:#222;color:#eee;border:1px solid #444;margin-bottom:5px;font-size:12px}
 #pane{flex:1;overflow:auto;min-height:0;font-size:13px}
-#trace{font:12px/1.5 var(--mono);padding:10px 14px}.ev{display:grid;grid-template-columns:18px 112px 1fr;gap:6px;white-space:pre-wrap;overflow-wrap:anywhere}.ev .t{color:#777}.ev .k{font-weight:700}
+#trace{font:12px/1.5 var(--mono);padding:10px 14px}.ev{display:grid;grid-template-columns:22px 140px 1fr;gap:6px;white-space:pre-wrap;overflow-wrap:anywhere}.ev .t{color:#777}.ev .k{font-weight:700}
 .k-user_msg{color:#6cc7f5}.k-agent_msg{color:#6fe39a}.k-state{color:#f5d04a}.k-tool_call,.k-tool_result{color:#c4a9ee}.k-approval_granted,.k-approval_consumed{color:#6fe39a}
-.k-approval_voided,.k-limit,.k-untrusted_flagged,.k-book_timeout,.k-error{color:#ff8466}.k-recover,.k-retry,.k-proposal_shown{color:var(--brand)}
+.k-approval_voided,.k-limit,.k-book_timeout,.k-error{color:#ff8466}.k-recover,.k-retry,.k-proposal_shown{color:var(--brand)}
+.k-untrusted_flagged{color:#ff5555;font-weight:800}.ev.ev-untrusted_flagged{background:rgba(255,77,77,0.12);border-left:3px solid #ff4d4d;padding:4px 6px;margin:3px 0;border-radius:3px}
 .pad{padding:10px 16px}.pad p{color:#aaa;margin:0 0 8px}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:5px 6px;border-bottom:1px solid #2a2a2a}th{color:#999;font-weight:500}
 .tag{padding:1px 8px;border-radius:99px;font-size:11.5px;font-weight:700;background:#333}.tag.good{background:var(--ok);color:#fff}.tag.bad{background:var(--bad);color:#fff}.tag.warn{background:var(--warn);color:#000}
 .fr{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #2a2a2a}.fr button,.demo button{background:#2a2a2a;color:#eee;border:1px solid #444;border-radius:4px;padding:3px 9px;font-size:12px}.fr button:hover,.demo button:hover{border-color:var(--brand)}
@@ -170,8 +171,12 @@ function drawFeed(force){
   $("feed").scrollTop=chat.length?1e9:0;tick()}
 function tick(){if(!S)return;const b=$("hold"),t=$("holdt");if(b&&S.hold){const left=Math.max(0,S.hold.expires_at-S.clock);b.firstChild.style.width=Math.min(100,left/6)+"%";t.textContent=left>0?`Slot held for you for ${Math.ceil(left/60)} more min`:"Hold expired: I'll re-check the price before booking"}}
 function evText(e){if(e.kind==="state")return `${e.frm} → ${e.to}  ${e.why||""}`;if(e.kind==="user_msg"||e.kind==="agent_msg")return e.text;
-  if(e.kind==="tool_call")return `${e.tool} ${JSON.stringify(e.args)}`;if(e.kind==="tool_result")return `${e.tool} → ${e.outcome}${e.code?" "+e.code:""} ${e.result?JSON.stringify(e.result).slice(0,120):""}`;
-  if(e.kind==="model_call")return `${e.fn}${e.accepted===false?"  REJECTED: "+e.rejected_reason:""}`;const o={...e};["i","n","t","run","turn","kind"].forEach(k=>delete o[k]);return JSON.stringify(o)}
+  if(e.kind==="tool_call")return `${e.tool} ${JSON.stringify(e.args)}`;if(e.kind==="tool_result")return `${e.tool} → ${e.outcome}${e.code?" "+e.code:""} ${e.result!==undefined?JSON.stringify(e.result):""}`;
+  if(e.kind==="model_call")return `${e.fn}${e.intent?" → "+JSON.stringify(e.intent):""}${e.providers?" (providers: "+e.providers.join(", ")+")":""}${e.accepted===false?"  REJECTED: "+e.rejected_reason:""}`;
+  if(e.kind==="untrusted_flagged")return `🛡️ WITHHELD ${e.withheld} review(s) — "${e.note||'review text looked like instructions; withheld'}"`;
+  if(e.kind==="memory_write")return `${e.key} = "${e.value||''}" (source: ${e.source}, confirmed: ${e.confirmed})`;
+  if(e.kind==="slots_changed")return `changed: [${(e.changed||[]).join(", ")}]`;
+  const o={...e};["i","n","t","run","turn","kind"].forEach(k=>delete o[k]);return JSON.stringify(o)}
 function drawHood(){if(!S)return;
   if(S.model&&$("model-tag"))$("model-tag").textContent=S.model;
   const sig=events.length+tab+filter+catFilter+JSON.stringify([S.approvals,S.bookings,S.memory,S.provider_calls,S.state,S.budget,S.approved_mutations,S.catalog]);if(sig===sigH)return;sigH=sig;
@@ -189,7 +194,7 @@ function drawHood(){if(!S)return;
   if(tab==="trace"){const f=el("select");[["all","All events"],["safety","Safety only"],["tools","Tool calls"]].forEach(([v,t])=>{const o=el("option","",t);o.value=v;f.append(o)});f.value=filter;f.onchange=()=>{filter=f.value;sigH="";drawHood()};tb.append(f)}
   const p=$("pane");
   if(tab==="trace"){const t=el("div");t.id="trace";events.filter(e=>filter==="all"||(filter==="safety"&&(SAFETY.has(e.kind)||(e.kind==="model_call"&&e.accepted===false)))||(filter==="tools"&&e.kind.startsWith("tool_"))).forEach(e=>{
-      const r=el("div","ev");r.append(el("span","t",e.turn),el("span","k k-"+e.kind,e.kind),el("span","",evText(e)));t.append(r)});
+      const r=el("div","ev"+(e.kind==="untrusted_flagged"?" ev-untrusted_flagged":""));r.append(el("span","t",e.turn),el("span","k k-"+e.kind,e.kind),el("span","",evText(e)));t.append(r)});
     const near=p.scrollHeight-p.scrollTop-p.clientHeight<80;p.replaceChildren(t);if(near)p.scrollTop=1e9;return}
   const w=el("div","pad");
   if(tab==="cat"){
